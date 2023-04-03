@@ -21,6 +21,7 @@ func Connect() {
 		host, port, user, password, dbname)
 		fmt.Println(connStr)
 	db, err := sql.Open("postgres", connStr)
+	defer db.Close()
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -31,3 +32,4 @@ func Connect() {
 	}
 	log.Println("成功")
 }
+
