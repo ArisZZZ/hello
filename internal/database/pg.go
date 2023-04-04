@@ -1,11 +1,13 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 
+	"github.com/ariszzz/hello/internal/entity"
 	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 const (
@@ -16,20 +18,18 @@ const (
 	dbname   = "mangosteen_dev"
 )
 
+
 func Connect() {
 	connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
-		fmt.Println(connStr)
-	db, err := sql.Open("postgres", connStr)
-	defer db.Close()
+	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
 	if err != nil {
 		log.Fatalln(err)
 	}
+	err = db.AutoMigrate(&entity.User{})
 	DB = db
-	err =db.Ping()
 	if err != nil {
-		log.Fatalln(err)
+		panic("failed to migrate table")
 	}
-	log.Println("成功")
+	log.Println("Connect db success")
 }
-

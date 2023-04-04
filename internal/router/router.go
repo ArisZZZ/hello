@@ -9,5 +9,7 @@ import (
 func New() *gin.Engine{
 	r := gin.Default()
 	r.GET("/ping",controller.Ping)
+	r.GET("/user/list",controller.GetUserList)
+	r.POST("/user",controller.CreateUser)
 	return r
 }
